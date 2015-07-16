@@ -1,7 +1,6 @@
 require 'uri'
 require 'open-uri'
 require 'nokogiri'
-require 'addressable/uri'
 
 module ImageFetcher
   module Parser

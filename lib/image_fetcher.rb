@@ -3,21 +3,26 @@ require 'image_fetcher/parser'
 require 'image_fetcher/filter_applyer'
 require 'image_fetcher/logger'
 require 'image_fetcher/collection_downloader'
+require 'addressable/uri'
 
 module ImageFetcher
   #NOTE You need specify absolute path
   def self.fetch(url, options)
     Logger.init_logger(options.fetch(:logfile))
-
     path = options.fetch(:path)
 
-    parser_res = Parser.parse(url).compact
-    filter_applyer = FilterApplyer.new(parser_res)
-    filter_applyer.apply!
+    if Addressable::URI.parse(url).host
+      parser_res = Parser.parse(url).compact
+      filter_applyer = FilterApplyer.new(parser_res)
+      filter_applyer.apply!
 
-    unless parser_res.empty?
-      downloader = CollectionDownloader.new(parser_res, path)
-      downloader.download
+      unless parser_res.empty?
+        downloader = CollectionDownloader.new(parser_res, path)
+        downloader.download
+      end
+    else
+      Logger.log("Can not parse given URL - #{url}")
+      return nil
     end
   end
 end
