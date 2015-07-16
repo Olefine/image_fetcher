@@ -1,14 +1,11 @@
-require 'uri'
-require 'open-uri'
-require 'nokogiri'
 require 'addressable/uri'
 
 module ImageFetcher
   module Parser
     class BaseParser
-      def self.parse(url)
-        parser = ImageFetcher::Parser::ImagesParser.new(url)
-        parser.get_images_urls
+      def initialize(url, document)
+        @url = url
+        @parsed_document = document
       end
 
       protected
@@ -23,6 +20,18 @@ module ImageFetcher
 
       def absolute_image_url(url)
         resolve_image_url(url)
+      end
+
+      def get_image_meta(src_url)
+        _url = URI(src_url)
+        req = Net::HTTP::Head.new(_url.to_s)
+        res = Net::HTTP.start(_url.host, _url.port) do |http|
+          http.request(req)
+        end
+
+        [res['content-length'].to_i, res['content-type'], res.code]
+      rescue RuntimeError => e
+        Logger.log(e.message)
       end
 
       def resolve_image_url(url)

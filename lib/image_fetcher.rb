@@ -12,7 +12,7 @@ module ImageFetcher
 
     path = options.fetch(:path)
 
-    parser_res = Parser::BaseParser.parse(url)
+    parser_res = Parser.parse(url).compact
     filter_applyer = FilterApplyer.new(parser_res)
     filter_applyer.apply
 
