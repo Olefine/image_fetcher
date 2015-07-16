@@ -9,10 +9,6 @@ module ImageFetcher
       end
 
       protected
-      def get_html_page
-        open(@url).read
-      end
-
       def base_url
         @base_url ||= begin
           uri = URI.parse(@url)
