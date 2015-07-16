@@ -13,7 +13,7 @@ module ImageFetcher
 
     parser_res = Parser.parse(url).compact
     filter_applyer = FilterApplyer.new(parser_res)
-    filter_applyer.apply
+    filter_applyer.apply!
 
     unless parser_res.empty?
       downloader = CollectionDownloader.new(parser_res, path)

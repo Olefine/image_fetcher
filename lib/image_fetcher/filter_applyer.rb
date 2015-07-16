@@ -11,7 +11,7 @@ module ImageFetcher
       @collection = collection
     end
 
-    def apply
+    def apply!
       DEFAULT_FILTERS.each do |filter_name|
         filter_class = "ImageFetcher::Filters::#{filter_name.capitalize}Filter"
         filter = eval(filter_class).new(@collection)

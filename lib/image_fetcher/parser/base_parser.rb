@@ -14,8 +14,10 @@ module ImageFetcher
       end
 
       def base_url
-        uri = URI.parse(@url)
-        @base_url ||= "#{uri.scheme}://#{uri.host}"
+        @base_url ||= begin
+          uri = URI.parse(@url)
+          "#{uri.scheme}://#{uri.host}"
+        end
       end
 
       def absolute_image_url(url)
@@ -35,7 +37,7 @@ module ImageFetcher
       end
 
       def resolve_image_url(url)
-        if(url =~ /^\w*\:/i)
+        if Addressable::URI.parse(url).host
           url
         else
           Addressable::URI.join(base_url, url).normalize.to_s
