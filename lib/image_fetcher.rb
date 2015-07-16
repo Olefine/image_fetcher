@@ -8,10 +8,10 @@ require 'pry-byebug'
 module ImageFetcher
   #NOTE You need specify absolute path
   def self.fetch(url, options)
-    # logfile = options.fetch('filename')
-    # logger = Logger.get_logger(logfile)
-    #
+    Logger.init_logger(options.fetch(:logfile))
+
     path = options.fetch(:path)
+
     parser_res = Parser::BaseParser.parse(url)
     filter_applyer = FilterApplyer.new(parser_res)
     filter_applyer.apply

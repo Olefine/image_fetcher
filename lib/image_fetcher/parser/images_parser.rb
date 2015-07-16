@@ -29,6 +29,8 @@ module ImageFetcher
         end
 
         [res['content-length'].to_i, res['content-type'], res.code]
+      rescue RuntimeError => e
+        Logger.log(e.message)
       end
     end
   end

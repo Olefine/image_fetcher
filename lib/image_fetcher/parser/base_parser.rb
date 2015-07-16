@@ -7,7 +7,7 @@ module ImageFetcher
   module Parser
     class BaseParser
       def self.parse(url)
-        parser = ImageFetcher::Parser::ImagesParser.new(url, path)
+        parser = ImageFetcher::Parser::ImagesParser.new(url)
         parser.get_images_urls
       end
 

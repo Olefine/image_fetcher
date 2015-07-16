@@ -16,8 +16,12 @@ module ImageFetcher
         uniq_filename = make_uniq_filename
 
         unless file_already_exist?(uniq_filename)
-          open(build_full_path(uniq_filename), 'wb') do |file|
-            file << open(@link).read
+          begin
+            open(build_full_path(uniq_filename), 'wb') do |file|
+              file << open(@link).read
+            end
+          rescue RuntimeError => e
+            Logger.log(e.message)
           end
         end
       end
