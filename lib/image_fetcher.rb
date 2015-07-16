@@ -3,7 +3,6 @@ require 'image_fetcher/parser'
 require 'image_fetcher/filter_applyer'
 require 'image_fetcher/logger'
 require 'image_fetcher/collection_downloader'
-require 'pry-byebug'
 
 module ImageFetcher
   #NOTE You need specify absolute path

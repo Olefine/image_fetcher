@@ -1,5 +1,8 @@
 require 'open-uri'
+require 'tempfile'
 require 'fileutils'
+require 'mimemagic'
+require 'addressable/uri'
 
 module ImageFetcher
   module Downloaders
@@ -7,9 +10,7 @@ module ImageFetcher
       def initialize(link_info, path)
         @link_info = link_info
         @link = link_info[:url]
-        @path = path
-
-        create_dir_path
+        @path = create_dir_path(path)
       end
 
       def download!
@@ -17,9 +18,16 @@ module ImageFetcher
 
         unless file_already_exist?(uniq_filename)
           begin
-            open(build_full_path(uniq_filename), 'wb') do |file|
-              file << open(@link).read
+            temp_file = create_tempfile(uniq_filename)
+            temp_file.write(open(@link).read)
+
+            if MimeMagic.by_path(temp_file.path).image?
+              final_filepath = build_full_path(uniq_filename)
+              FileUtils.cp temp_file.path, final_filepath
             end
+
+            temp_file.unlink
+
           rescue Timeout::Error => e
             Logger.log(e.message)
           end
@@ -27,6 +35,11 @@ module ImageFetcher
       end
 
       private
+      def create_tempfile(uniq_filename)
+        base, ext = uniq_filename.split('.')
+        Tempfile.new([base, ".#{ext}"])
+      end
+
       def file_already_exist?(uniq_filename)
         File.exist?(build_full_path(uniq_filename))
       end
@@ -43,7 +56,6 @@ module ImageFetcher
       end
 
       def extract_filename
-        #FIXME get extension if not exist
         url = URI.parse(@link)
         basename = File.basename(url.path)
 
@@ -59,10 +71,14 @@ module ImageFetcher
         type == 'jpeg' ? 'jpg' : type
       end
 
-      def create_dir_path
-        unless File.exist?(@path)
-          FileUtils::mkdir_p @path
+      def create_dir_path(path)
+        site_folder = Addressable::URI.parse(@link)
+        _path = File.join(path, site_folder.host)
+        unless Dir.exist?(_path)
+          FileUtils::mkdir_p _path
         end
+
+        _path
       end
     end
   end
