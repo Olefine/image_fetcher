@@ -7,7 +7,7 @@ module ImageFetcher
   module Parser
     class BaseParser
       def self.parse(url)
-        parser = ImageFetcher::Parser::ImagesParser.new(url)
+        parser = ImageFetcher::Parser::ImagesParser.new(url, path)
         parser.get_images_urls
       end
 
@@ -22,7 +22,7 @@ module ImageFetcher
       end
 
       def absolute_image_url(url)
-        @absolute_url ||= resolve_image_url(url)
+        resolve_image_url(url)
       end
 
       def resolve_image_url(url)

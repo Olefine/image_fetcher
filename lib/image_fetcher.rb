@@ -3,6 +3,7 @@ require 'image_fetcher/parser'
 require 'image_fetcher/filter_applyer'
 require 'image_fetcher/logger'
 require 'image_fetcher/collection_downloader'
+require 'pry-byebug'
 
 module ImageFetcher
   #NOTE You need specify absolute path
@@ -10,12 +11,13 @@ module ImageFetcher
     # logfile = options.fetch('filename')
     # logger = Logger.get_logger(logfile)
     #
+    path = options.fetch(:path)
     parser_res = Parser::BaseParser.parse(url)
     filter_applyer = FilterApplyer.new(parser_res)
     filter_applyer.apply
 
     unless parser_res.empty?
-      downloader = CollectionDownloader.new(parser_res, options[:path])
+      downloader = CollectionDownloader.new(parser_res, path)
       downloader.download
     end
   end
