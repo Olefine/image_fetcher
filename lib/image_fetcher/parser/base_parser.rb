@@ -30,7 +30,7 @@ module ImageFetcher
         end
 
         [res['content-length'].to_i, res['content-type'], res.code]
-      rescue RuntimeError => e
+      rescue Timeout::Error => e
         Logger.log(e.message)
       end
 

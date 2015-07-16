@@ -20,7 +20,7 @@ module ImageFetcher
             open(build_full_path(uniq_filename), 'wb') do |file|
               file << open(@link).read
             end
-          rescue RuntimeError => e
+          rescue Timeout::Error => e
             Logger.log(e.message)
           end
         end
