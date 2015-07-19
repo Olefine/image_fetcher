@@ -8,7 +8,10 @@ module ImageFetcher
         @parsed_document = document
       end
 
-      protected
+      def get_images_urls
+      end
+
+      private
       def base_url
         @base_url ||= begin
           uri = URI.parse(@url)

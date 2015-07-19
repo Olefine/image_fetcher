@@ -4,7 +4,7 @@ module ImageFetcher
 
     private
     def satisfied?(image_info)
-      image_info[:content_length] > MIN_CONTENT_LENGTH ? true : false
+      image_info[:content_length] >= MIN_CONTENT_LENGTH ? true : false
     end
   end
 end

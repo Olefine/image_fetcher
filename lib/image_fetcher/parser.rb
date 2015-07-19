@@ -1,4 +1,5 @@
 require 'uri'
+require 'pry-byebug'
 require 'open-uri'
 require 'nokogiri'
 require_relative './parser/base_parser'
@@ -12,13 +13,14 @@ module ImageFetcher
     def self.parse(url)
       document = Nokogiri::HTML(open(url).read)
       image_infos = []
+
       PARSERS.each do |parser|
         parser_class = eval("ImageFetcher::Parser::#{parser.capitalize}Parser")
         parser = parser_class.new(url, document)
         image_infos << parser.get_images_urls
       end
 
-      image_infos.flatten
+      image_infos.flatten.compact
     end
   end
 end

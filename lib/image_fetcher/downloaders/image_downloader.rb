@@ -14,16 +14,13 @@ module ImageFetcher
       end
 
       def download!
-        uniq_filename = make_uniq_filename
-
-        unless file_already_exist?(uniq_filename)
+        unless file_already_exist?(extract_filename)
           begin
-            temp_file = create_tempfile(uniq_filename)
+            temp_file = create_tempfile
             temp_file.write(open(@link).read)
 
             if MimeMagic.by_path(temp_file.path).image?
-              final_filepath = build_full_path(uniq_filename)
-              FileUtils.cp temp_file.path, final_filepath
+              FileUtils.cp temp_file.path, build_full_path
             end
 
             temp_file.unlink
@@ -35,35 +32,30 @@ module ImageFetcher
       end
 
       private
-      def create_tempfile(uniq_filename)
-        base, ext = uniq_filename.split('.')
-        Tempfile.new([base, ".#{ext}"])
+      def create_tempfile
+        base, ext = @filename.split('.')
+        Tempfile.new(["#{base}_#{Time.now.to_i}", ".#{ext}"])
       end
 
       def file_already_exist?(uniq_filename)
-        File.exist?(build_full_path(uniq_filename))
+        File.exist?(build_full_path)
       end
 
-      def build_full_path(filename)
-        @fullpath ||= File.join(@path, filename)
-      end
-
-      def make_uniq_filename
-        orig_filename = extract_filename
-        unique_filename = orig_filename
-
-        unique_filename
+      def build_full_path
+        @fullpath ||= File.join(@path, @filename)
       end
 
       def extract_filename
-        url = URI.parse(@link)
-        basename = File.basename(url.path)
+        @filename ||= begin
+          url = URI.parse(@link)
+          basename = File.basename(url.path)
 
-        unless basename =~ /(png|jpg|gif|jpeg)/
-          basename = "#{basename}.#{get_ext_by_mime_type}"
+          unless basename =~ /(png|jpg|gif|jpeg)/
+            basename = "#{basename}.#{get_ext_by_mime_type}"
+          end
+
+          basename
         end
-
-        basename
       end
 
       def get_ext_by_mime_type

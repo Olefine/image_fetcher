@@ -6,13 +6,12 @@ require 'image_fetcher/collection_downloader'
 require 'addressable/uri'
 
 module ImageFetcher
-  #NOTE You need specify absolute path
   def self.fetch(url, options)
     Logger.init_logger(options.fetch(:logfile))
     path = options.fetch(:path)
 
     if Addressable::URI.parse(url).host
-      parser_res = Parser.parse(url).compact
+      parser_res = Parser.parse(url)
       filter_applyer = FilterApplyer.new(parser_res)
       filter_applyer.apply!
 
