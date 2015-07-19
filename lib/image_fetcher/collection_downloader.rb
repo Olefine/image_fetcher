@@ -11,7 +11,7 @@ module ImageFetcher
     def download
       @image_infos.each do |image_info|
         image_downloader = ::ImageFetcher::Downloaders::ImageDownloader.new(image_info, @path, @page_url)
-        image_downloader.download!
+        image_downloader.async.download!
       end
     end
   end

@@ -7,6 +7,8 @@ require 'addressable/uri'
 module ImageFetcher
   module Downloaders
     class ImageDownloader
+      include Celluloid
+
       def initialize(link_info, path, url)
         @link_info = link_info
         @link = link_info[:url]

@@ -6,10 +6,6 @@ describe ImageFetcher do
   let(:files_in_path) { path + '/*'}
   let(:logfile) { '/tmp/logfile.txt' }
 
-  after(:all) do
-    FileUtils.rm_r Dir.glob("/tmp/spec/*")
-  end
-
   it 'has a version number' do
     expect(ImageFetcher::VERSION).not_to be nil
   end
