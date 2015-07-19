@@ -33,4 +33,6 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'nokogiri'
   spec.add_dependency 'addressable'
   spec.add_dependency 'mimemagic'
+  spec.add_dependency 'celluloid'
+  spec.add_dependency 'celluloid-io'
 end

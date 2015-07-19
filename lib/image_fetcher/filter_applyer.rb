@@ -5,7 +5,7 @@ require_relative './filters/content_filter'
 
 module ImageFetcher
   class FilterApplyer
-    DEFAULT_FILTERS = %w(content size forbidden)
+    DEFAULT_FILTERS = %w(content forbidden size)
 
     def initialize(collection)
       @collection = collection

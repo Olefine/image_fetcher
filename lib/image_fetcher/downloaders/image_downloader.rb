@@ -7,17 +7,18 @@ require 'addressable/uri'
 module ImageFetcher
   module Downloaders
     class ImageDownloader
-      def initialize(link_info, path)
+      def initialize(link_info, path, url)
         @link_info = link_info
         @link = link_info[:url]
         @path = create_dir_path(path)
+        @page_url = url
       end
 
       def download!
         unless file_already_exist?(extract_filename)
           begin
             temp_file = create_tempfile
-            temp_file.write(open(@link).read)
+            temp_file.write(open(@link, 'Referer' => @page_url).read)
 
             if MimeMagic.by_path(temp_file.path).image?
               FileUtils.cp temp_file.path, build_full_path

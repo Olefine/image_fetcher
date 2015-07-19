@@ -4,13 +4,8 @@ module ImageFetcher
       def get_images_urls
         get_document_elements.uniq.map do |h_img|
           absolute_url = absolute_image_url(h_img['src'])
-          content_length, content_type, status_code = get_image_meta(absolute_url)
-          {
-             url: absolute_url,
-             content_length: content_length,
-             content_type: content_type,
-             status_code: status_code
-          }
+          req_sender = ImageFetcher::ParserRequestSender.new(absolute_url, @url)
+          req_sender.future.send_request!
         end
       end
 

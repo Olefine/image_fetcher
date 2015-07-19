@@ -1,4 +1,5 @@
 require 'addressable/uri'
+require 'celluloid'
 
 module ImageFetcher
   module Parser
@@ -21,18 +22,6 @@ module ImageFetcher
 
       def absolute_image_url(url)
         resolve_image_url(url)
-      end
-
-      def get_image_meta(src_url)
-        _url = URI(src_url)
-        req = Net::HTTP::Head.new(_url.to_s)
-        res = Net::HTTP.start(_url.host, _url.port) do |http|
-          http.request(req)
-        end
-
-        [res['content-length'].to_i, res['content-type'], res.code]
-      rescue Timeout::Error => e
-        Logger.log(e.message)
       end
 
       def resolve_image_url(url)

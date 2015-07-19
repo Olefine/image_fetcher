@@ -16,7 +16,7 @@ module ImageFetcher
       filter_applyer.apply!
 
       unless parser_res.empty?
-        downloader = CollectionDownloader.new(parser_res, path)
+        downloader = CollectionDownloader.new(parser_res, path, url)
         downloader.download
       end
     else
