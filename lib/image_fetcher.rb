@@ -1,4 +1,5 @@
 require "image_fetcher/version"
+require 'image_fetcher/common_error'
 require 'image_fetcher/parser'
 require 'image_fetcher/filter_applyer'
 require 'image_fetcher/logger'
@@ -12,16 +13,14 @@ module ImageFetcher
 
     if Addressable::URI.parse(url).host
       parser_res = Parser.parse(url)
-      filter_applyer = FilterApplyer.new(parser_res)
-      filter_applyer.apply!
+      FilterApplyer.apply!(parser_res)
 
       unless parser_res.empty?
-        downloader = CollectionDownloader.new(parser_res, path, url)
-        downloader.download
+        CollectionDownloader.download(parser_res, path, url)
       end
     else
       Logger.log("Can not parse given URL - #{url}")
-      return nil
+      nil
     end
   end
 end

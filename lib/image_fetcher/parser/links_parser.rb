@@ -9,7 +9,7 @@ module ImageFetcher
         links = filter(get_document_elements.uniq)
         links.map do |link|
           absolute_url = absolute_image_url(link)
-          @pool ||= ImageFetcher::ParserRequestSender.pool(size: 100)
+          @pool ||= ImageFetcher::Parser::RequestSender.pool(size: 100)
           @pool.future.send_request!(absolute_url, @url)
         end
       end

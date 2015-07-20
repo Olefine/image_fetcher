@@ -9,8 +9,7 @@ describe ImageFetcher::Filters::ContentFilter do
   end
 
   it 'reduces collection filtring by image content_type' do
-    filter = ImageFetcher::Filters::ContentFilter.new(collection)
-    filter.apply!
+    ImageFetcher::Filters::ContentFilter.apply!(collection)
     expect(collection.size).to eql(1)
   end
 end

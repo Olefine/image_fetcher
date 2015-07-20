@@ -1,5 +1,4 @@
 require 'addressable/uri'
-require 'celluloid'
 
 module ImageFetcher
   module Parser

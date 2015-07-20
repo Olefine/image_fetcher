@@ -3,7 +3,7 @@ module ImageFetcher
     MIN_CONTENT_LENGTH = 5120
 
     private
-    def satisfied?(image_info)
+    def self.satisfied?(image_info)
       image_info[:content_length] >= MIN_CONTENT_LENGTH ? true : false
     end
   end

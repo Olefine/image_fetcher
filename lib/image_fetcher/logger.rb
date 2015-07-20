@@ -7,7 +7,7 @@ module ImageFetcher
         if File.exist?(logfile)
           @logger ||= ::Logger.new(logfile)
         else
-          raise "File doesnt exist"
+          raise ImageFetcher::LogfileDoesNotExist, "#{logfile}"
         end
       end
 

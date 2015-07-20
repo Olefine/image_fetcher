@@ -9,8 +9,7 @@ describe ImageFetcher::Filters::ForbiddenFilter do
   end
 
   it 'reduces collection filtring by status_code' do
-    filter = ImageFetcher::Filters::ForbiddenFilter.new(collection)
-    filter.apply!
+    ImageFetcher::Filters::ForbiddenFilter.apply!(collection)
     expect(collection.size).to eql(1)
   end
 end

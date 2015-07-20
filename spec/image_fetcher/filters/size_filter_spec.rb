@@ -8,8 +8,7 @@ describe ImageFetcher::Filters::SizeFilter do
   end
 
   it 'reduces collection filtring by status_code' do
-    filter = ImageFetcher::Filters::SizeFilter.new(collection)
-    filter.apply!
+    ImageFetcher::Filters::SizeFilter.apply!(collection)
     expect(collection.size).to eql(1)
   end
 end

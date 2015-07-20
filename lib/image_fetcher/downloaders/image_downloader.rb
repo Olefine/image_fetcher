@@ -9,6 +9,10 @@ module ImageFetcher
     class ImageDownloader
       include Celluloid
 
+      def self.async_download!(link_info, path, url)
+        new(link_info, path, url).async.download!
+      end
+
       def initialize(link_info, path, url)
         @link_info = link_info
         @link = link_info[:url]
@@ -17,27 +21,25 @@ module ImageFetcher
       end
 
       def download!
-        unless file_already_exist?(extract_filename)
-          begin
-            temp_file = create_tempfile
-            temp_file.write(open(@link, 'Referer' => @page_url).read)
+        return if file_already_exist?(extract_filename)
+        begin
+          temp_file = create_tempfile
+          temp_file.write(open(@link, 'Referer' => @page_url).read)
 
-            if MimeMagic.by_path(temp_file.path).image?
-              FileUtils.cp temp_file.path, build_full_path
-            end
-
-            temp_file.unlink
-
-          rescue Timeout::Error => e
-            Logger.log(e.message)
+          if MimeMagic.by_path(temp_file.path).image?
+            FileUtils.cp temp_file.path, build_full_path
           end
+
+          temp_file.unlink
+        rescue Timeout::Error, Net::HTTPError => e
+          Logger.log(e.message)
         end
       end
 
       private
       def create_tempfile
         base, ext = @filename.split('.')
-        Tempfile.new(["#{base}_#{Time.now.to_i}", ".#{ext}"])
+        Tempfile.new(["#{base}_#{Time.now.to_f}", ".#{ext}"])
       end
 
       def file_already_exist?(uniq_filename)
