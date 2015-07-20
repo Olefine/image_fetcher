@@ -13,7 +13,7 @@ module ImageFetcher
 
     if Addressable::URI.parse(url).host
       parser_res = Parser.parse(url)
-      FilterApplyer.apply!(parser_res)
+      FilterApplyer.apply(parser_res)
 
       unless parser_res.empty?
         CollectionDownloader.download(parser_res, path, url)

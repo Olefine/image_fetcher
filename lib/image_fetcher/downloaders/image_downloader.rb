@@ -9,8 +9,8 @@ module ImageFetcher
     class ImageDownloader
       include Celluloid
 
-      def self.async_download!(link_info, path, url)
-        new(link_info, path, url).async.download!
+      def self.async_download(link_info, path, url)
+        new(link_info, path, url).async.download
       end
 
       def initialize(link_info, path, url)
@@ -20,7 +20,7 @@ module ImageFetcher
         @page_url = url
       end
 
-      def download!
+      def download
         return if file_already_exist?(extract_filename)
         begin
           temp_file = create_tempfile

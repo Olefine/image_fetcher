@@ -7,10 +7,10 @@ module ImageFetcher
   module FilterApplyer
     DEFAULT_FILTERS = %w(content forbidden size)
 
-    def self.apply!(collection)
+    def self.apply(collection)
       DEFAULT_FILTERS.each do |filter_name|
         filter_class = "ImageFetcher::Filters::#{filter_name.capitalize}Filter"
-        eval(filter_class).apply!(collection)
+        eval(filter_class).apply(collection)
       end
 
       collection
